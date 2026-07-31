@@ -38,13 +38,20 @@ The app's data lives in a local SQLite database accessed through **Drizzle ORM**
 
 ## Data-Access Helpers (injectable db)
 
-Helpers take the `db` instance as their first argument so they work both with the real client (in pages) and an in-memory client (in tests):
+Helpers take the `db` instance as their first argument so they work both with the real client (in pages) and an in-memory client (in tests). **All exported helpers must be documented with JSDoc/TSDoc** describing purpose, parameters, return value, and any important usage notes. See [`comments-and-docs.instructions.md`](comments-and-docs.instructions.md) for patterns.
 
 ```ts
 import { asc, count, eq } from 'drizzle-orm';
 import type { Database } from './db';
 import { games } from '../../db/schema';
 
+/**
+ * Retrieves all game IDs from the database, ordered by title.
+ * Used at build time to enumerate all game pages (getStaticPaths).
+ * 
+ * @param db - Injected database instance (real or test).
+ * @returns Promise<number[]> - Game IDs sorted by title (deterministic for static builds).
+ */
 export async function getAllGameIds(db: Database): Promise<number[]> {
   const rows = await db.select({ id: games.id }).from(games).orderBy(asc(games.title));
   return rows.map((r) => r.id);
@@ -54,6 +61,7 @@ export async function getAllGameIds(db: Database): Promise<number[]> {
 - Always `order by` a stable column (title) so static builds are deterministic.
 - Map raw rows to the app-facing `Game`/`Publisher`/`Category` types in one place; don't leak Drizzle row shapes into components.
 - Keep ordering/lookup logic in `games.ts`, not in pages.
+- Document every exported function and type (see [`comments-and-docs.instructions.md`](comments-and-docs.instructions.md)).
 
 ## Determinism
 
