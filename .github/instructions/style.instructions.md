@@ -52,3 +52,49 @@ ALL UI components MUST use dark theme colors:
 - Smooth transitions: `transition-all duration-200 ease-in-out`
 - Shadows for depth: `shadow-md`, `shadow-lg`, `shadow-xl`
 - Focus states for accessibility: `focus:ring-2 focus:ring-blue-500`
+
+## TypeScript Code Formatting
+
+### Type Annotations
+
+- Use **explicit types** for function parameters and return values in the data layer (`db/`, `src/lib/`). This aids readability and enables proper type checking with `tsgo` (TypeScript 7).
+
+```ts
+// Good: explicit types
+export async function getAllGames(db: Database): Promise<Game[]> {
+  // ...
+}
+
+// Avoid: inferred types in exported functions
+export async function getAllGames(db) {  // ❌ avoid this
+  // ...
+}
+```
+
+### Spacing and Line Length
+
+- Keep lines readable (aim for ~100 characters max).
+- Use consistent indentation (2 spaces).
+- Add a blank line between logical sections in files.
+
+### Comments and Documentation
+
+All exported functions and types **must have JSDoc/TSDoc comments** describing purpose, parameters, and return values. See [`comments-and-docs.instructions.md`](comments-and-docs.instructions.md) for detailed patterns.
+
+```ts
+/**
+ * Derives a deterministic star rating (3.0–5.0) from a game title.
+ * 
+ * @param title - Game title to hash
+ * @returns number - Star rating in range [3.0, 5.0]
+ */
+export function ratingFromTitle(title: string): number {
+  // ...
+}
+```
+
+### Enforcement
+
+TypeScript formatting is verified by:
+- **ESLint** (`npm run lint`) — enforces code quality and style for `.ts`, `.tsx`, and `.astro` files
+- **Type checking** (`npm run typecheck`) — ensures explicit types via `tsgo` (TypeScript 7) on the data layer

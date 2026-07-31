@@ -120,3 +120,4 @@ There is no Svelte/React layer. When a page genuinely needs client behaviour, ad
 - Minimize client-side JavaScript — the default is zero JS shipped
 - Import and use global CSS styles from layouts
 - Always include a `data-testid` on interactive elements (see `ui.instructions.md`)
+- **Document all component Props interfaces** with JSDoc comments explaining purpose, parameter meanings, and any special behavior. See [`comments-and-docs.instructions.md`](comments-and-docs.instructions.md) for patterns and examples.
